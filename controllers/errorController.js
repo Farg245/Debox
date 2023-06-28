@@ -8,5 +8,5 @@ exports.onError = (res, msg = "Something went wrong") => {
 };
 
 exports.onInvalidEndpoint = (res) => {
-  res.json("Please use valid endpoints to access resourcse!");
+  res.json("Please use valid endpoints to access resource!");
 };
