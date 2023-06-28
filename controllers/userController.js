@@ -199,8 +199,6 @@ exports.addOrder = async (req, res, next) => {
       items: orderedItems,
       totalAmount: total,
       orderDate: new Date(),
-      paidThrough: "",
-      paymentResponse: "",
       orderStatus: "waiting",
     });
 

@@ -20,14 +20,7 @@ const orderSchema = new Schema({
   orderDate: {
     type: Date,
   },
-  paidThrough: {
-    // COD// CARD // Net Banking // Google Pay
-    type: String,
-  },
-  paymentResponse: {
-    // Bank or PG response with Transaction number Log for refund or enquiry
-    type: String,
-  },
+  
   orderStatus: {
     // waiting // preparing // onway // delivered // cancelled // failed
     type: String,
