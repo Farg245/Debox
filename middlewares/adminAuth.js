@@ -1,34 +1,27 @@
 const jwt = require("jsonwebtoken");
-const AppError = require("../controllers/errorController");
-const User = require("../models/user");
-const { APP_KEY } = require("../config/AppConst");
+const { ADMIN_SECRET_KEY } = require("../config/AppConst");
 
 module.exports = async (req, res, next) => {
   try {
-    const { authorization } = req.headers;
+    const authorization = req.get("Authorization");
     if (!authorization) {
-      return AppError.unAuthorised();
+      return res.status(401).json({ message: "Authorization error" });
     }
-    const token = authorization.replace("Bearer ", "");
 
+    const token = authorization.split(" ")[1];
     let decodedToken;
+
     try {
-      decodedToken = await jwt.verify(token, APP_KEY);
+      decodedToken = jwt.verify(token, ADMIN_SECRET_KEY);
     } catch (err) {
-      return AppError.onError(res, "Authorization verification failed!");
+      return res.status(500).json({ message: "Unable to authenticate" });
     }
 
-    const { userId } = decodedToken;
-    try {
-      const user = await User.findById(userId);
-      if (!user) {
-        return AppError.onError(res, "Authorization token is not valid");
-      }
-      req.user = user;
-      next();
-    } catch (err) {
-      return AppError.onError(res, "Authorization token is not valid");
+    if (!decodedToken || !decodedToken.isAdmin) {
+      return res.status(401).json({ message: "User is not authorized" });
     }
+
+    next();
   } catch (err) {
     next(err);
   }

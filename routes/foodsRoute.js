@@ -4,6 +4,7 @@ const router = express.Router();
 const AppError = require("../controllers/errorController");
 const foodController = require("../controllers/foodController");
 
+
 router.get("/vegan", foodController.getVeganFoods);
 router.get("/allergenfree", foodController.getAllergenFreeFoods);
 

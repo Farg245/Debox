@@ -17,7 +17,8 @@ const AppError = require("./controllers/errorController");
  */
 const userRoutes = require("./routes/userRoutes");
 const foodRoutes = require("./routes/foodsRoute");
-
+const merchantRoute = require("./routes/merchantRoute");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
@@ -43,11 +44,11 @@ app.use(helmet());
 app.use(compression());
 app.use(bodyParser.json());
 app.use("/images", express.static(path.join(__dirname, "images")));
-
+app.use("/merchant", merchantRoute); 
 app.use("/user", userRoutes); // --- User Acccess
 app.use("/food", foodRoutes); // -- Product Access
- 
-app.use(AppError.unAuthorised); // -- Error Handler
+app.use("/auth", authRoutes);
+//app.use(AppError.unAuthorised); // -- Error Handler
 
 app.use((error, req, res, next) => {
   const status = error.statusCode || 500;
