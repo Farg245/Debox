@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const { ADMIN_SECRET_KEY } = require("../config/AppConst");
 
 module.exports = async (req, res, next) => {
-  try {
+  try { 
     const authorization = req.get("Authorization");
     if (!authorization) {
       return res.status(401).json({ message: "Authorization error" });

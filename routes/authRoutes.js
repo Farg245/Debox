@@ -25,7 +25,7 @@ router.post("/login", async (req, res, next) => {
   
       // Generate admin token with isAdmin: true
       const token = jwt.sign({ isAdmin: true }, ADMIN_SECRET_KEY);
-  
+      console.log('test')
       res.status(200).json({ token });
     } catch (err) {
       next(err);

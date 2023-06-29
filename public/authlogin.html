@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Login Form</title>
+</head>
+<body>
+  <h1>Admin Login Form</h1>
+
+  <p><strong>Note:</strong> The following credentials are provided to showcase the authentication system and are not intended for actual security:</p>
+  <p>Email: admin@example.com</p>
+  <p>Password: adminpassword</p>
+
+  <form id="loginForm">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" value="admin@example.com" required>
+    <br><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" value="adminpassword" required>
+    <br><br>
+    <input type="submit" value="Login">
+  </form>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent form submission
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      // Create an object with the login credentials
+      const credentials = {
+        email: username,
+        password: password
+      };
+
+      // Send a POST request to the login endpoint
+      axios.post('http://localhost:8000/auth/login', credentials)
+        .then(response => {
+          const data = response.data;
+
+          // Store the token in the local storage
+          localStorage.setItem('token', data.token);
+
+          // Redirect to the viewall.html
+          window.location.href = 'viewall.html';
+        })
+        .catch(error => {
+          console.error(error); 
+        });
+    });
+  </script>
+</body>
+</html>
