@@ -4,10 +4,22 @@
   <title>Pending Orders</title>
   <style>
     #dataContainer {
-      white-space: pre-wrap;
-      font-family: monospace;
+      font-family: Arial, sans-serif;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
       background-color: #f5f5f5;
-      padding: 10px;
     }
   </style>
 </head>
@@ -39,56 +51,96 @@
     // Retrieve the token from the localStorage
     const token = localStorage.getItem('token');
 
-    // Include the authorization bearer token in the headers of subsequent requests
-    axios.get('http://localhost:8000/merchant/pendingorders', {
-      headers: {
-        'Authorization': 'Bearer ' + token
-      }
-    })
-      .then(response => {
+    async function fetchData() {
+      try {
+        // Include the authorization bearer token in the headers of subsequent requests
+        const response = await axios.get('http://localhost:8000/merchant/pendingorders', {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
+
         const data = response.data;
 
         // Handle the response from the backend
-        console.log(data); 
+        console.log(data);
 
         // Format and display the data in the HTML page
+        const formattedData = formatData(data);
         const dataContainer = document.getElementById('dataContainer');
-        dataContainer.textContent = JSON.stringify(data, null, 2);
+        dataContainer.innerHTML = createTable(formattedData);
 
         // Populate the dropdown with order IDs
         const orderSelect = document.getElementById('orderSelect');
-        data.forEach(order => {
+        formattedData.forEach(order => {
           const option = document.createElement('option');
           option.value = order.orderID;
           option.textContent = order.orderID;
           orderSelect.appendChild(option);
         });
-      })
-      .catch(error => {
-        console.error(error); // Replace with your own error handling
-      });
+      } catch (error) {
+        console.error(error);
+      }
+    }
 
-    function markOrderCompleted() {
+    async function markOrderCompleted() {
       const orderSelect = document.getElementById('orderSelect');
       const selectedOrderID = orderSelect.value;
 
       if (selectedOrderID) {
-        // Perform a GET request to mark the order as completed
-        axios.get(`http://localhost:8000/merchant/completedorder/${selectedOrderID}`, {
-          headers: {
-            'Authorization': 'Bearer ' + token
-          }
-        })
-          .then(response => {
-            console.log(response.data); 
-            // Refresh the page to update the pending orders list
-            window.location.reload();
-          })
-          .catch(error => {
-            console.error(error); 
+        try {
+          // Perform a GET request to mark the order as completed
+          await axios.get(`http://localhost:8000/merchant/completedorder/${selectedOrderID}`, {
+            headers: {
+              'Authorization': 'Bearer ' + token
+            }
           });
+
+          console.log(`Order ${selectedOrderID} marked as completed.`);
+          // Refresh the page to update the pending orders list
+          await fetchData();
+        } catch (error) {
+          console.error(error);
+        }
       }
     }
+
+    function formatData(data) {
+      const formattedData = data.map(order => {
+        // Remove unwanted fields
+        const { _id, __v, items, ...orderData } = order;
+
+        return orderData;
+      });
+
+      return formattedData;
+    }
+
+    function createTable(data) {
+      let tableHtml = '<table>';
+
+      // Create table headers
+      const headers = Object.keys(data[0]);
+      tableHtml += '<tr>';
+      headers.forEach(header => {
+        tableHtml += `<th>${header}</th>`;
+      });
+      tableHtml += '</tr>';
+
+      // Create table rows
+      data.forEach(row => {
+        tableHtml += '<tr>';
+        Object.values(row).forEach(value => {
+          tableHtml += `<td>${value}</td>`;
+        });
+        tableHtml += '</tr>';
+      });
+
+      tableHtml += '</table>';
+      return tableHtml;
+    }
+
+    fetchData();
   </script>
 </body>
 </html>

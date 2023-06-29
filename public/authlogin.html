@@ -22,7 +22,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
-    document.getElementById('loginForm').addEventListener('submit', function(event) {
+    document.getElementById('loginForm').addEventListener('submit', async function(event) {
       event.preventDefault(); // Prevent form submission
 
       const username = document.getElementById('username').value;
@@ -34,20 +34,19 @@
         password: password
       };
 
-      // Send a POST request to the login endpoint
-      axios.post('http://localhost:8000/auth/login', credentials)
-        .then(response => {
-          const data = response.data;
+      try {
+        // Send a POST request to the login endpoint
+        const response = await axios.post('http://localhost:8000/auth/login', credentials);
+        const data = response.data;
 
-          // Store the token in the local storage
-          localStorage.setItem('token', data.token);
+        // Store the token in the local storage
+        localStorage.setItem('token', data.token);
 
-          // Redirect to the viewall.html
-          window.location.href = 'viewall.html';
-        })
-        .catch(error => {
-          console.error(error); 
-        });
+        // Redirect to the viewall.html
+        window.location.href = 'viewall.html';
+      } catch (error) {
+        console.error(error);
+      }
     });
   </script>
 </body>

@@ -5,8 +5,11 @@ const { APP_KEY } = require("../config/AppConst");
 const User = require("../models/user");
 const Food = require("../models/food");
 const Order = require("../models/order");
+const OrderItem = require("../models/orderItem");
 const { validationResult } = require("express-validator");
 const currencyConverter = require('../util/currencyConverter2');
+
+
 const handleValidationErrors = (req, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -121,7 +124,7 @@ exports.addToCart = async (req, res, next) => {
     next(err);
   }
 };
-//editCart and generally cart/:id/:qty can generally crash the app if the request :id doesnt exist in the Cart/ take into account when using or developing website/front-end
+  //editCart and generally cart/:id/:qty can generally crash the app if the request :id doesnt exist in the Cart/ take into account when using or developing website/front-end
 exports.editCart = async (req, res, next) => {
   const userId = req.userId;
   const foodId = req.params.id;
@@ -174,32 +177,36 @@ exports.getSelectedOrder = async (req, res, next) => {
     next(err);
   }
 };
-
 exports.addOrder = async (req, res, next) => {
   const userId = req.userId;
   const orderId = `${Math.floor(Math.random() * 89999 + 1000)}`;
 
   try {
-    const user = await User.findById(userId)
-      .populate("order")
-      .populate("cart.food");
+    const user = await User.findById(userId).populate("cart.food");
+
+    if (user.cart.length === 0) {
+      const error = new Error("Cart is empty");
+      error.statusCode = 400;
+      throw error;
+    }
 
     let total = 0;
     let orderedItems = [];
 
-    const currency = req.query.currency || "EUR"; // Get the requested currency from req.query or use EUR as default
-
-    const exchangeRate = await currencyConverter.getExchangeRate(currency);
-    if (!exchangeRate) {
-      throw new Error('Invalid currency');
-    }
+    const currency = req.query.currency || "EUR";
 
     user.cart.forEach((item) => {
-      let qty = item.qty;
-      let price = item.food.price_eur * exchangeRate; // Convert the price to the requested currency
+      const qty = item.qty;
+      const price = item.food.price_eur; // Assuming the price is already in the desired currency
       total += qty * price;
-      orderedItems.push(item.food);
+
+      const orderItem = new OrderItem({
+        food: item.food._id,
+        quantity: qty,
+      });
+      orderedItems.push(orderItem);
     });
+
     const roundedTotal = Number(total.toFixed(2));
     const order = new Order({
       orderID: orderId,
@@ -207,7 +214,7 @@ exports.addOrder = async (req, res, next) => {
       totalAmount: roundedTotal,
       orderDate: new Date(),
       orderStatus: "waiting",
-      currency: currency, // Set the currency field in the order
+      currency: currency,
     });
 
     const savedOrder = await order.save();
@@ -215,16 +222,15 @@ exports.addOrder = async (req, res, next) => {
     user.order.push(savedOrder);
     user.cart = [];
 
-    const result = await user.save();
+    await user.save();
 
-    res.status(200).json(result.order);
+    res.status(200).json(savedOrder);
   } catch (err) {
     console.error("Error:", err);
     err.statusCode = err.statusCode || 500;
     next(err);
   }
 };
-
 
 exports.viewProfile = async (req, res, next) => {
   const userId = req.userId;

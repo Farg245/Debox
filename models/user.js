@@ -28,8 +28,6 @@ const userSchema = new Schema({
     {
       food: { type: Schema.Types.ObjectId, ref: "Food", required: true },
       qty: { type: Number, required: true },
-  
-
     },
   ],
   order: [
@@ -39,6 +37,7 @@ const userSchema = new Schema({
     },
   ],
 });
+
 userSchema.methods.addToCart = function (foodItem) {
   const existingFoodIndex = this.cart.findIndex((cartFood) =>
     cartFood.food._id.equals(foodItem._id)
@@ -57,9 +56,8 @@ userSchema.methods.addToCart = function (foodItem) {
 
   return this.save();
 };
-////
+
 userSchema.methods.editCart = function (foodItem, newQty) {
-  
   if (newQty < 1) {
     // Remove the food item from the cart if the new quantity is less than 1
     this.cart = this.cart.filter((cartFood) =>
@@ -81,4 +79,5 @@ userSchema.methods.editCart = function (foodItem, newQty) {
 
   return this.save();
 };
+
 module.exports = mongoose.model("User", userSchema);
