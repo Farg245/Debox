@@ -26,7 +26,8 @@ const productSchema =new mongoose.Schema({
   price_eur: {
     type: Number,
     required: true
-  }
+  } 
+
 });
 
 module.exports = mongoose.model("Food", productSchema);

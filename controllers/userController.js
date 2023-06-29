@@ -6,7 +6,7 @@ const User = require("../models/user");
 const Food = require("../models/food");
 const Order = require("../models/order");
 const { validationResult } = require("express-validator");
-
+const currencyConverter = require('../util/currencyConverter2');
 const handleValidationErrors = (req, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -187,19 +187,27 @@ exports.addOrder = async (req, res, next) => {
     let total = 0;
     let orderedItems = [];
 
+    const currency = req.query.currency || "EUR"; // Get the requested currency from req.query or use EUR as default
+
+    const exchangeRate = await currencyConverter.getExchangeRate(currency);
+    if (!exchangeRate) {
+      throw new Error('Invalid currency');
+    }
+
     user.cart.forEach((item) => {
       let qty = item.qty;
-      let price = item.food.price_eur;
+      let price = item.food.price_eur * exchangeRate; // Convert the price to the requested currency
       total += qty * price;
       orderedItems.push(item.food);
     });
-
+    const roundedTotal = Number(total.toFixed(2));
     const order = new Order({
       orderID: orderId,
       items: orderedItems,
-      totalAmount: total,
+      totalAmount: roundedTotal,
       orderDate: new Date(),
       orderStatus: "waiting",
+      currency: currency, // Set the currency field in the order
     });
 
     const savedOrder = await order.save();
@@ -216,6 +224,7 @@ exports.addOrder = async (req, res, next) => {
     next(err);
   }
 };
+
 
 exports.viewProfile = async (req, res, next) => {
   const userId = req.userId;

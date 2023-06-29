@@ -20,10 +20,12 @@ const orderSchema = new Schema({
   orderDate: {
     type: Date,
   },
-  
   orderStatus: {
-    // waiting // preparing // onway // delivered // cancelled // failed
     type: String,
+  },
+  currency: {
+    type: String,
+    default: "EUR",
   },
 });
 
