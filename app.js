@@ -45,10 +45,10 @@ app.use(helmet());
 app.use(compression());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
-
+app.use("/food", foodRoutes);
 app.use("/merchant", merchantRoute); 
 app.use("/user", userRoutes); // --- User Acccess
-app.use("/food", foodRoutes); // -- Product Access
+
 app.use("/auth", authRoutes);
 app.use(AppError.unAuthorised); // -- Error Handler
 

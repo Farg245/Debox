@@ -69,8 +69,13 @@ http://localhost:8000/auth/login
 http://localhost:8000/merchant/viewall 
 http://localhost:8000/merchant/pendingorders and 
 http://localhost:8000/merchant/completedorder/:orderID
+  
 
+  Web app link again http://localhost:8000/authlogin.html
 Again all these can be tested from postman and the link i posted.
+
+
+
 
 
 ## Deployment

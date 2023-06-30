@@ -1,6 +1,6 @@
 const AppError = require('./errorController');
 const Food = require('../models/food');
-const CurrencyConverter = require('../util/currencyConverter');
+const CurrencyConverter = require('../util/currencyConverter2');
 
 exports.getAvailableFoods = async (req, res, next) => {
   const currency = req.query.currency || 'EUR'; // Default currency is EUR
