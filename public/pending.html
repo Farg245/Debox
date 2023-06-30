@@ -89,7 +89,7 @@
 
       if (selectedOrderID) {
         try {
-          // Perform a GET request to mark the order as completed
+          
           await axios.get(`http://localhost:8000/merchant/completedorder/${selectedOrderID}`, {
             headers: {
               'Authorization': 'Bearer ' + token

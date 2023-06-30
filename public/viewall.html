@@ -56,17 +56,13 @@
         
         const data = response.data;
 
-        // Handle the response from the backend
-        console.log(data);
-
+      
         // Format and display the data in the HTML page
         const dataContainer = document.getElementById('dataContainer');
         const formattedData = formatData(data);
         dataContainer.innerHTML = createTable(formattedData);
         
-        // Check if the item array is empty
-        const isEmpty = checkEmptyItems(formattedData);
-        console.log('Item array is empty:', isEmpty);
+      
       } catch (error) {
         console.error(error);
       }
