@@ -61,7 +61,8 @@ Once you log in copy take the token response from the post request and make an A
 http://localhost:8000/user/profile where you can see current logged users profile
 Once logged in as a user there are the following endpoints    http://localhost:8000/user/cart/:id where you add item with _id= :id to your cart ( like 649c3e79b36c62700ed98fae ,649c3e79b36c62700ed98fb1 )
 http://localhost:8000/user/cart/:id/qty where you can edit the quantity of an item in your cart. 
-http://localhost:8000/user/add-order you add your carts contents to the order collection .
+http://localhost:8000/user/add-order you add your carts contents to the order collection.This also supports currency conversion by adding ?currency=USD for example at the end of the url as a req query param.
+
 http://localhost:8000/user/order where you can view all your orders
 
 Finally the app has a seperate log in for the admin/merchant which is done from http://localhost:8000/authlogin.html and  this allows  to access all the orders in the collection , see which ones are pending and mark some as completed all through axios calls to endpoints like these 
