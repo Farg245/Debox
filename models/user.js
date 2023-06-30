@@ -57,7 +57,7 @@ userSchema.methods.addToCart = function (foodItem) {
   return this.save();
 };
 
-userSchema.methods.editCart = function (foodItem, newQty) {
+userSchema.methods.editCart = async function (foodItem, newQty) {
   if (newQty < 1) {
     // Remove the food item from the cart if the new quantity is less than 1
     this.cart = this.cart.filter((cartFood) =>
@@ -73,11 +73,16 @@ userSchema.methods.editCart = function (foodItem, newQty) {
       this.cart[existingFoodIndex].qty = newQty;
     } else {
       // Food item not found in the cart
-      return Promise.reject();
+      return Promise.reject(new Error("Food item not found in the cart."));
     }
   }
 
-  return this.save();
+  try {
+    await this.save();
+    return this;
+  } catch (error) {
+    return Promise.reject(error);
+  }
 };
 
 module.exports = mongoose.model("User", userSchema);
