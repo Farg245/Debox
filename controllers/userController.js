@@ -21,11 +21,20 @@ const handleValidationErrors = (req, next) => {
 };
 
 exports.onSignup = async (req, res, next) => {
-  handleValidationErrors(req, next);
-
-  const { email, password, firstName, lastName, address, phone } = req.body;
-
   try {
+    handleValidationErrors(req, next);
+
+    const { email, password, firstName, lastName, address, phone } = req.body;
+
+    // Check if a user with the given email already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      // If the user already exists, return an error response
+      const err = new Error("User with this email already exists.");
+      err.statusCode = 409; // Conflict status code
+      throw err;
+    }
+
     const hashPassword = await bcrypt.hash(password, 12);
 
     const user = new User({
