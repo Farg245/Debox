@@ -1,4 +1,4 @@
-# Project Title
+# Debox
 
 Backend of an online delivery shop.
 
@@ -83,3 +83,5 @@ Again all these can be tested from postman and the link i posted.
 
 No cloud deployment as of right now , hopefully i can do it asap.
 
+## Time
+This project was built from scratch and i estimate it took me about 12-15hours complete.
