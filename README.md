@@ -64,7 +64,7 @@ The API endpoints can be tested using an application like Postman. If you follow
 - `POST /auth/login`: Log in as an admin/merchant by providing the necessary credentials.
 - `GET /merchant/viewall`: Get all the orders in the collection.
 - `GET /merchant/pendingorders`: Get the pending orders.
-- `POST /merchant/completedorder/:orderID`: Mark the order with the specified `orderID` as completed.
+- `GET /merchant/completedorder/:orderID`: Mark the order with the specified `orderID` as completed.
 
 Web app link: http://localhost:8000/authlogin.html
 
