@@ -8,6 +8,10 @@ const orderItemSchema = new Schema({
     ref: "Food",
     required: true,
   },
+  foodName: { // Add foodName field
+    type: String,
+    required: true,
+  },
   quantity: {
     type: Number,
     required: true,

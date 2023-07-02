@@ -9,8 +9,19 @@ const orderSchema = new Schema({
   },
   items: [
     {
-      type: Schema.Types.ObjectId,
-      ref: "OrderItem",
+      food: {
+        type: Schema.Types.ObjectId,
+        ref: "Food",
+        required: true,
+      },
+      foodName: {
+        type: String,
+        required: true,
+      },
+      quantity: {
+        type: Number,
+        required: true,
+      },
     },
   ],
   totalAmount: {

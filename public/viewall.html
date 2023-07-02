@@ -67,21 +67,26 @@
         console.error(error);
       }
     }
+function formatData(data) {
+  const formattedData = data.map(order => {
+    // Remove unwanted fields
+    const { _id, __v, items, ...orderData } = order;
 
-    function formatData(data) {
-      const formattedData = data.map(order => {
-        // Remove unwanted fields
-        const { _id, __v, items, ...orderData } = order;
+    // Convert the orderDate to a more readable format
+    orderData.orderDate = new Date(orderData.orderDate).toLocaleString('en-US', { timeZone: 'Europe/Helsinki' });
 
-        // Convert the orderDate to a more readable format
-        orderData.orderDate = new Date(orderData.orderDate).toLocaleString('en-US', { timeZone: 'Europe/Helsinki' });
+    // Format the items array
+    const formattedItems = items.map(item => {
+      return `${item.foodName} (Quantity: ${item.quantity})`;
+    });
 
-        return orderData;
-      });
+    orderData.items = formattedItems.join(', ');
 
-      return formattedData;
-    }
-    
+    return orderData;
+  });
+
+  return formattedData;
+}
     function checkEmptyItems(data) {
       return data.every(order => order.items.length === 0);
     }

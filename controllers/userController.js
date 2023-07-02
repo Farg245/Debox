@@ -211,6 +211,7 @@ exports.addOrder = async (req, res, next) => {
 
       const orderItem = new OrderItem({
         food: item.food._id,
+        foodName: item.food.item_name, // Add foodName property
         quantity: qty,
       });
       orderedItems.push(orderItem);
@@ -227,7 +228,7 @@ exports.addOrder = async (req, res, next) => {
     });
 
     const savedOrder = await order.save();
-
+    console.log(savedOrder)
     user.order.push(savedOrder);
     user.cart = [];
 

@@ -106,15 +106,25 @@
     }
 
     function formatData(data) {
-      const formattedData = data.map(order => {
-        // Remove unwanted fields
-        const { _id, __v, items, ...orderData } = order;
+  const formattedData = data.map(order => {
+    // Remove unwanted fields
+    const { _id, __v, items, ...orderData } = order;
 
-        return orderData;
-      });
+    // Convert the orderDate to a more readable format
+    orderData.orderDate = new Date(orderData.orderDate).toLocaleString('en-US', { timeZone: 'Europe/Helsinki' });
 
-      return formattedData;
-    }
+    // Format the items array
+    const formattedItems = items.map(item => {
+      return `${item.foodName} (Quantity: ${item.quantity})`;
+    });
+
+    orderData.items = formattedItems.join(', ');
+
+    return orderData;
+  });
+
+  return formattedData;
+}
 
     function createTable(data) {
       let tableHtml = '<table>';
