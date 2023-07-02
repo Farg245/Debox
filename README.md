@@ -1,87 +1,78 @@
 # Debox
 
-Backend of an online delivery shop.
-
 ## Table of Contents
 
 - [Project Description](#project-description)
-
-
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-
-
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
 - [API Documentation](#api-documentation)
+- [Deployment](#deployment)
+- [Time](#time)
 
 ## Project Description
 
-This the back-end of an online delivery application that allows guest users to view items & submit orders. There is also a simple web-page done in plain html that allows the admin(admin e-mail and password are provided in the html page )  so he can view the orders and even change one of their attributes to from 'waiting' to 'completed'. The backend is done in nodejs and the database is mongodb hosted on the mongoatlas.
+Debox is the backend of an online delivery application that allows guest users to view items and submit orders. It also includes a simple web page in plain HTML for the admin to view and manage orders. The backend is built with Node.js, and the database used is MongoDB hosted on MongoDB Atlas.
 
+## Prerequisites
 
-### Prerequisites
+Before running the application, make sure you have the following prerequisites:
 
-Nodejs,Postman Desktop Application for testing end points through this collection https://www.postman.com/winter-astronaut-614435/workspace/debox/collection/18021096-f018896d-0696-45ca-80c8-a9c5c67b6f67?action=share&creator=18021096 
+- Node.js
+- Postman Desktop Application for testing API endpoints. You can use the [Postman Collection](https://www.postman.com/winter-astronaut-614435/workspace/debox/collection/18021096-f018896d-0696-45ca-80c8-a9c5c67b6f67?action=share&creator=18021096) provided.
 
-### Installation
+## Installation
 
 To install and run the application, follow these steps:
 
 1. Clone the repository to your local machine.
 2. Open a terminal and navigate to the project directory.
 3. Run the following command:
-   npm run install-run
+  npm run install-run
 
-This script will install the dependencies specified in the package.json file and start the application using nodemon.
+  This script will install the dependencies specified in the package.json file and start the application using nodemon.
 
 Make sure you have Node.js and npm installed on your machine with the versions specified in the engines section of the package.json file.
 
-
-
 ## API Documentation
-This nodejs project runs locally on port 8000 so makesure that port isnt in use in your machine. It is  connected to an online mongo database , it also makes axios calls to the fixer.io api to make currency conversions, it is a free tier so there is a chance those api calls ran out and the app crashes ![Alt text](image.png). Please run the requests on an application like Postman.
 
+This node.js project runs locally on port 8000. Please ensure that port is not in use on your machine. The application is connected to an online MongoDB database and makes axios calls to the fixer.io API for currency conversions (free tier). If the API calls run out, the app may crash.
 
-- The app has access to a food collection in the mongo database which one can access at GET http://localhost:8000/food/ .It allows to  also access foods by category  GET http://localhost:8000/food/:category   (Beverages/Main Dishes/Appetizers) , or get only vegan foods or only allergen free foods GET http://localhost:8000/food/vegan , GET http://localhost:8000/food/allergenfree .
-Finally one  can add <?currency=   >   like so GET http://localhost:8000/food/?currency=USD for example to convert the food.price in USD currency from EUR which is the default currency.
+The API endpoints can be tested using an application like Postman. If you follow the [Postman Collection link](https://www.postman.com/winter-astronaut-614435/workspace/debox/collection/18021096-f018896d-0696-45ca-80c8-a9c5c67b6f67?action=share&creator=18021096), make sure to choose the Debox environment on the top right of the Postman app so that logins work as intended.
 
--The app supports sign up through a post request at POST http://localhost:8000/user/signup  using a body like 
-{
-  "email": "example@example.com",
-  "password": "password123",
-  "firstName": "John",
-  "lastName": "Doe",
-  "address": "123 Street",
-  "phone": "1234567890"
-}  
-and once  you are signed up you can use the login endpoint POST http://localhost:8000/user/login as post request  , to skip the sign up  {
-  "email": "example@example.com",
-  "password": "password123"} credentials are provided for test purposes.
-Once you log in copy take the token response from the post request and make an Autorization key in the headers section of post man like so ![Alt text](image-1.png)  . *Note that by accessing the postman collection link i posted above this probably doesnt have to be done manually and you can just launch the app open the collection on the postman app and work from there withthe keys already saved in those collections.
+### Food API
 
-http://localhost:8000/user/profile where you can see current logged users profile
-Once logged in as a user there are the following endpoints    http://localhost:8000/user/cart/:id where you add item with _id= :id to your cart ( like 649c3e79b36c62700ed98fae ,649c3e79b36c62700ed98fb1 )
-http://localhost:8000/user/cart/:id/qty where you can edit the quantity of an item in your cart. 
-http://localhost:8000/user/add-order you add your carts contents to the order collection.This also supports currency conversion by adding ?currency=USD for example at the end of the url as a req query param.
+- `GET /food`: Retrieves all the food items from the MongoDB food collection.
+- `GET /food/:category`: Retrieves food items by category (Beverages, Main Dishes, Appetizers).
+- `GET /food/vegan`: Retrieves only vegan food items.
+- `GET /food/allergenfree`: Retrieves only allergen-free food items.
+- To convert the food price to a different currency, append `?currency=<desired_currency>` to the URL. For example, `GET /food/?currency=USD` converts the food price to USD from the default currency (EUR).
 
-http://localhost:8000/user/order where you can view all your orders
+### User API
 
-Finally the app has a seperate log in for the admin/merchant which is done from http://localhost:8000/authlogin.html and  this allows  to access all the orders in the collection , see which ones are pending and mark some as completed all through axios calls to endpoints like these 
-http://localhost:8000/auth/login
-http://localhost:8000/merchant/viewall 
-http://localhost:8000/merchant/pendingorders and 
-http://localhost:8000/merchant/completedorder/:orderID
-  
+- `POST /user/signup`: Sign up a new user by providing the necessary details in the request body.
+- `POST /user/login`: Log in as a user by providing the email and password in the request body. Credentials are provided for test purposes.
+- `GET /user/profile`: Get the profile of the currently logged-in user.
+- `GET /user/cart/:id`: Add an item with the given `id` to the user's cart.
+- `POST /user/cart/:id/qty`: Edit the quantity of an item in the user's cart.
+- `POST /user/add-order`: Add the contents of the user's cart to the order collection. Supports currency conversion by appending `?currency=<desired_currency>` as a request query parameter.
+- `GET /user/order`: View all the orders made by the user.
 
-  Web app link again http://localhost:8000/authlogin.html
-Again all these can be tested from postman and the link i posted.
+### Admin/Merchant API
 
+- Admin/Merchant login is done from `/authlogin.html`.
+- `POST /auth/login`: Log in as an admin/merchant by providing the necessary credentials.
+- `GET /merchant/viewall`: Get all the orders in the collection.
+- `GET /merchant/pendingorders`: Get the pending orders.
+- `POST /merchant/completedorder/:orderID`: Mark the order with the specified `orderID` as completed.
 
+Web app link: http://localhost:8000/authlogin.html
 
-
+Again, all these endpoints can be tested from Postman using the provided [Postman Collection](https://www.postman.com/winter-astronaut-614435/workspace/debox/collection/18021096-f018896d-0696-45ca-80c8-a9c5c67b6f67?action=share&creator=18021096). If you follow the link, make sure to choose the Debox environment on the top right of the Postman app so that logins work as intended.
 
 ## Deployment
 
-No cloud deployment as of right now , hopefully i can do it asap.
+Currently, there is no cloud deployment for this project. Deployment to a cloud service is planned for the future.
 
 ## Time
-This project was built from scratch and i estimate it took me about 12-15hours complete.
+
+This project was built from scratch, and it took approximately 12-15 hours to complete.
