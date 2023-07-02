@@ -53,68 +53,78 @@
             'Authorization': 'Bearer ' + token
           }
         });
-        
+
         const data = response.data;
 
-      
         // Format and display the data in the HTML page
         const dataContainer = document.getElementById('dataContainer');
         const formattedData = formatData(data);
         dataContainer.innerHTML = createTable(formattedData);
-        
-      
+
       } catch (error) {
         console.error(error);
       }
     }
-function formatData(data) {
-  const formattedData = data.map(order => {
-    // Remove unwanted fields
-    const { _id, __v, items, ...orderData } = order;
 
-    // Convert the orderDate to a more readable format
-    orderData.orderDate = new Date(orderData.orderDate).toLocaleString('en-US', { timeZone: 'Europe/Helsinki' });
+    function formatData(data) {
+      const formattedData = data.map(order => {
+        // Remove unwanted fields
+        const { _id, __v, items, user, ...orderData } = order;
 
-    // Format the items array
-    const formattedItems = items.map(item => {
-      return `${item.foodName} (Quantity: ${item.quantity})`;
-    });
+        // Convert the orderDate to a more readable format
+        orderData.orderDate = new Date(orderData.orderDate).toLocaleString('en-US', { timeZone: 'Europe/Helsinki' });
 
-    orderData.items = formattedItems.join(', ');
+        // Format the items array
+        const formattedItems = items.map(item => {
+          return `${item.foodName} (Quantity: ${item.quantity})`;
+        });
 
-    return orderData;
-  });
+        orderData.items = formattedItems.join(', ');
 
-  return formattedData;
-}
+        // Include user email and address
+        orderData.userEmail = user.email;
+        orderData.userAddress = user.address;
+
+        return orderData;
+      });
+
+      return formattedData;
+    }
+
     function checkEmptyItems(data) {
       return data.every(order => order.items.length === 0);
     }
 
     function createTable(data) {
-      let tableHtml = '<table>';
-      
-      // Create table headers
-      const headers = Object.keys(data[0]);
-      tableHtml += '<tr>';
-      headers.forEach(header => {
-        tableHtml += `<th>${header}</th>`;
-      });
-      tableHtml += '</tr>';
-      
-      // Create table rows
-      data.forEach(row => {
-        tableHtml += '<tr>';
-        headers.forEach(header => {
-          tableHtml += `<td>${row[header]}</td>`;
-        });
-        tableHtml += '</tr>';
-      });
-      
-      tableHtml += '</table>';
-      
-      return tableHtml;
-    }
+  let tableHtml = '<table>';
+  
+  // Create table headers
+  const headers = Object.keys(data[0]);
+  tableHtml += '<tr>';
+  headers.forEach(header => {
+    tableHtml += `<th>${header}</th>`;
+  });
+  tableHtml += '</tr>';
+  
+  // Create table rows
+  data.forEach(row => {
+    tableHtml += '<tr>';
+    headers.forEach(header => {
+      if (header === 'user') {
+        // Access the user object properties
+        const { email, address } = row.user;
+        tableHtml += `<td>${email}<br>${address}</td>`;
+      } else {
+        tableHtml += `<td>${row[header]}</td>`;
+      }
+    });
+    tableHtml += '</tr>';
+  });
+  
+  tableHtml += '</table>';
+  
+  return tableHtml;
+}
 
     fetchData();
   </script>

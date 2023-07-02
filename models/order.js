@@ -38,6 +38,17 @@ const orderSchema = new Schema({
     type: String,
     default: "EUR",
   },
+  user: {
+    email: {
+      type: String,
+      required: true,
+    },
+    address: {
+      type: String,
+      required: true,
+    },
+  },
 });
+
 
 module.exports = mongoose.model("Order", orderSchema);

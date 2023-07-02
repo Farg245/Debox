@@ -106,25 +106,33 @@
     }
 
     function formatData(data) {
-  const formattedData = data.map(order => {
-    // Remove unwanted fields
-    const { _id, __v, items, ...orderData } = order;
+      const formattedData = data.map(order => {
+        // Remove unwanted fields
+        const { _id, __v, items, user, ...orderData } = order;
 
-    // Convert the orderDate to a more readable format
-    orderData.orderDate = new Date(orderData.orderDate).toLocaleString('en-US', { timeZone: 'Europe/Helsinki' });
+        // Convert the orderDate to a more readable format
+        orderData.orderDate = new Date(orderData.orderDate).toLocaleString('en-US', { timeZone: 'Europe/Helsinki' });
 
-    // Format the items array
-    const formattedItems = items.map(item => {
-      return `${item.foodName} (Quantity: ${item.quantity})`;
-    });
+        // Format the items array
+        const formattedItems = items.map(item => {
+          return `${item.foodName} (Quantity: ${item.quantity})`;
+        });
 
-    orderData.items = formattedItems.join(', ');
+        orderData.items = formattedItems.join(', ');
 
-    return orderData;
-  });
+        // Include user email and address
+        orderData.userEmail = user.email;
+        orderData.userAddress = user.address;
 
-  return formattedData;
-}
+        return orderData;
+      });
+
+      return formattedData;
+    }
+
+    function checkEmptyItems(data) {
+      return data.every(order => order.items.length === 0);
+    }
 
     function createTable(data) {
       let tableHtml = '<table>';
@@ -140,13 +148,14 @@
       // Create table rows
       data.forEach(row => {
         tableHtml += '<tr>';
-        Object.values(row).forEach(value => {
-          tableHtml += `<td>${value}</td>`;
+        headers.forEach(header => {
+          tableHtml += `<td>${row[header]}</td>`;
         });
         tableHtml += '</tr>';
       });
 
       tableHtml += '</table>';
+
       return tableHtml;
     }
 

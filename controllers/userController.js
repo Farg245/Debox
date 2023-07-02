@@ -225,10 +225,13 @@ exports.addOrder = async (req, res, next) => {
       orderDate: new Date(),
       orderStatus: "waiting",
       currency: currency,
+      user: {
+        email: user.email,
+        address: user.address
+      }
     });
 
     const savedOrder = await order.save();
-    console.log(savedOrder)
     user.order.push(savedOrder);
     user.cart = [];
 
