@@ -1,0 +1,32 @@
+item_name,category,has_allergens,is_vegan,price_eur
+Bruschetta,Appetizers,false,true,7.99
+Nachos,Appetizers,false,false,9.99
+Spring Rolls,Appetizers,false,true,5.99
+Burger,Main Dishes,true,false,10.99
+Pizza,Main Dishes,true,false,12.99
+Pasta,Main Dishes,true,true,9.99
+Steak,Main Dishes,false,false,15.99
+Salad,Main Dishes,false,true,8.99
+Sandwich,Main Dishes,false,true,7.99
+Sushi,Main Dishes,false,false,14.99
+Tacos,Main Dishes,false,true,9.99
+Fried Chicken,Main Dishes,true,false,11.99
+Burrito,Main Dishes,true,true,9.99
+Soup,Main Dishes,false,true,6.99
+Ramen,Main Dishes,true,true,8.99
+Fish and Chips,Main Dishes,false,false,10.99
+Noodle Stir Fry,Main Dishes,false,true,9.99
+Curry,Main Dishes,false,true,9.99
+Quesadilla,Main Dishes,true,false,8.99
+Omelette,Main Dishes,false,true,7.99
+Casserole,Main Dishes,false,true,9.99
+Grilled Cheese,Main Dishes,true,false,6.99
+Wrap,Main Dishes,false,true,7.99
+Coffee,Beverages,false,true,2.49
+Tea,Beverages,false,true,2.09
+Smoothie,Beverages,false,true,3.99
+Juice,Beverages,false,true,2.49
+Milkshake,Beverages,false,false,4.99
+Soda,Beverages,false,true,1.69
+Lemonade,Beverages,false,true,2.09
+Iced Tea,Beverages,false,true,2.49
