@@ -54,7 +54,7 @@ The API endpoints can be tested using an application like Postman. If you follow
 - `POST /user/login`: Log in as a user by providing the email and password in the request body. Credentials are provided for test purposes.
 - `GET /user/profile`: Get the profile of the currently logged-in user.
 - `GET /user/cart/:id`: Add an item with the given `id` to the user's cart.
-- `POST /user/cart/:id/qty`: Edit the quantity of an item in the user's cart.
+- `PUT /user/cart/:id/qty`: Edit the quantity of an item in the user's cart.
 - `POST /user/add-order`: Add the contents of the user's cart to the order collection. Supports currency conversion by appending `?currency=<desired_currency>` as a request query parameter.
 - `GET /user/order`: View all the orders made by the user.
 
