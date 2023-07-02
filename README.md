@@ -18,7 +18,8 @@ Debox is the backend of an online delivery application that allows guest users t
 Before running the application, make sure you have the following prerequisites:
 
 - Node.js
-- Postman Desktop Application for testing API endpoints. You can use the [Postman Collection](https://www.postman.com/winter-astronaut-614435/workspace/debox/collection/18021096-f018896d-0696-45ca-80c8-a9c5c67b6f67?action=share&creator=18021096) provided.
+- Postman Desktop Application for testing API endpoints. You can use the [Postman Collection](https://www.postman.com/winter-astronaut-614435/workspace/debox/collection/18021096-f018896d-0696-45ca-80c8-a9c5c67b6f67?action=share&creator=18021096) provided and make sure to choose the Debox environment on the top right of the Postman app so that authentication works as intended.
+
 
 ## Installation
 
