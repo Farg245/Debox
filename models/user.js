@@ -61,7 +61,7 @@ userSchema.methods.editCart = async function (foodItem, newQty) {
   if (newQty < 1) {
     // Remove the food item from the cart if the new quantity is less than 1
     this.cart = this.cart.filter((cartFood) =>
-      cartFood.food._id.equals(foodItem._id)
+      !cartFood.food._id.equals(foodItem._id)
     );
   } else {
     const existingFoodIndex = this.cart.findIndex((cartFood) =>
@@ -84,5 +84,4 @@ userSchema.methods.editCart = async function (foodItem, newQty) {
     return Promise.reject(error);
   }
 };
-
 module.exports = mongoose.model("User", userSchema);
